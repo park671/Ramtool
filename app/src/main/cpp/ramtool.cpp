@@ -38,7 +38,7 @@ extern "C"
 JNIEXPORT jstring JNICALL
 Java_com_applovin_ramtool_NativeBridge_testLatency(JNIEnv *env, jclass clazz) {
     int count = 3;
-    char *params[] = {"128", "128", "2048"};
+    char *params[] = {"128", "256", "8192"};
     entrance(count, params);
     return charToJstring(env, getLatencys());
 }

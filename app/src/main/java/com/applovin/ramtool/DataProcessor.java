@@ -20,6 +20,7 @@ public class DataProcessor {
     }
 
     private double l1CacheLatency, memoryLatency;
+    private double l1CacheSize;
     private List<Double> latencys, sortedDiffLatency;
     private List<String> sizes;
 
