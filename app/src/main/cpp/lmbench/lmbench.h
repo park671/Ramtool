@@ -13,6 +13,7 @@ int entrance(int ac, char **av);
 double getMemoryLatency();
 double getL1CacheLatency();
 char * getLatencys();
+char * getCurrentLatencys();
 
 #ifdef __cplusplus
 }

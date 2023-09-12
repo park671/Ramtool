@@ -26,6 +26,15 @@ Java_com_applovin_ramtool_NativeBridge_allocHeapMemory(JNIEnv *env, jclass clazz
     return JNI_FALSE;
 }
 
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_applovin_ramtool_NativeBridge_release(JNIEnv *env, jclass clazz) {
+    for (int i = 0; i < index; i++) {
+        free(array[i]);
+    }
+    index = 0;
+}
+
 jstring charToJstring(JNIEnv *env, const char *pat) {
     jclass strClass = (*env).FindClass("java/lang/String");
     jmethodID ctorID = (*env).GetMethodID(strClass, "<init>", "([BLjava/lang/String;)V");
@@ -34,11 +43,12 @@ jstring charToJstring(JNIEnv *env, const char *pat) {
     jstring encoding = (*env).NewStringUTF("utf-8");
     return (jstring) (*env).NewObject(strClass, ctorID, bytes, encoding);
 }
+
 extern "C"
 JNIEXPORT jstring JNICALL
 Java_com_applovin_ramtool_NativeBridge_testLatency(JNIEnv *env, jclass clazz) {
     int count = 3;
-    char *params[] = {"128", "256", "8192"};
+    char *params[] = {"128", "256", "2048"};
     entrance(count, params);
     return charToJstring(env, getLatencys());
 }
@@ -49,10 +59,7 @@ Java_com_applovin_ramtool_NativeBridge_testBandWidth(JNIEnv *env, jclass clazz) 
 }
 
 extern "C"
-JNIEXPORT void JNICALL
-Java_com_applovin_ramtool_NativeBridge_release(JNIEnv *env, jclass clazz) {
-    for (int i = 0; i < index; i++) {
-        free(array[i]);
-    }
-    index = 0;
+JNIEXPORT jstring JNICALL
+Java_com_applovin_ramtool_NativeBridge_getCurrentLatency(JNIEnv *env, jclass clazz) {
+    return charToJstring(env, getLatencys());
 }

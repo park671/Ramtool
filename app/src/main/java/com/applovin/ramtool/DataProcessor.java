@@ -53,7 +53,14 @@ public class DataProcessor {
             latencys.add(Double.parseDouble(latencyStr));
             sizes.add(sizeStr);
         }
-        //todo
+        try {
+            AnalyzeData();
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+        }
+    }
+
+    private void AnalyzeData() {
         List<Double> sortedLatency = new ArrayList<>(latencys);
         Collections.sort(sortedLatency);
         sortedDiffLatency = new ArrayList<>();
@@ -99,7 +106,6 @@ public class DataProcessor {
                 }
             }
         }
-
     }
 
     public double getL1CacheLatency() {

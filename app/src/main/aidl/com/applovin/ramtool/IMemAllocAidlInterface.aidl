@@ -13,4 +13,6 @@ interface IMemAllocAidlInterface {
     void release();
     String testBandWidth();
     String testLatency();
+    String getCurrentLatency();
+    boolean isLatencyFinish();
 }

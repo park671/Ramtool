@@ -19,6 +19,7 @@ char *id = "$Id: s.lat_mem_rd.c 1.13 98/06/30 16:13:49-07:00 lm@lm.bitmover.com 
 
 #define STRIDE  (512/sizeof(char *))
 #define    LOWER    512
+#define RESULT_SIZE 2100
 
 void loads(size_t len, size_t range, size_t stride,
            int parallel, int warmup, int repetitions);
@@ -29,18 +30,29 @@ void initialize(iter_t iterations, void *cookie);
 
 benchmp_f fpInit = stride_initialize;
 
-char info[110], latency_result_string[2000];
+char info[110], latency_result_string[RESULT_SIZE];
 
 double memSizeResult[500];
 double latencyResult[500];
 int resultIndex = 0;
 
-char * getLatencys(){
+char *getLatencys() {
+    logd("lmbench", "strcat result");
+    memset(latency_result_string, 0, 2000);
+    for (int i = 0; i < resultIndex; ++i) {
+        if (i) {
+            strcat(latency_result_string, "#");
+        }
+        sprintf(info, "%.5f:%.3f", memSizeResult[i], latencyResult[i]);
+        strcat(latency_result_string, info);
+    }
+    logd("lmbench", "strcat finish");
     return latency_result_string;
 }
 
 int entrance(int ac, char **av) {
     resultIndex = 0;
+    memset(latency_result_string, 0, RESULT_SIZE);
     int i;
     int c;
     int parallel = 1;
@@ -79,7 +91,7 @@ int entrance(int ac, char **av) {
 
     if (optind == ac - 1) {
         sprintf(info, "stride=%d\n", STRIDE);
-		logd("lmbench", (char *)info);
+        logd("lmbench", (char *) info);
         for (range = LOWER; range <= len; range = step(range)) {
             loads(len, range, STRIDE, parallel,
                   warmup, repetitions);
@@ -87,27 +99,17 @@ int entrance(int ac, char **av) {
     } else {
         for (i = optind + 1; i < ac; ++i) {
             stride = bytes(av[i]);
-            sprintf(info, "stride=%d\n", stride);
-			logd("lmbench", info);
+            sprintf(info, "stride=%d, size=%d\n", stride, len);
+            logd("lmbench", info);
             for (range = LOWER; range <= len; range = step(range)) {
                 loads(len, range, stride, parallel,
                       warmup, repetitions);
             }
             sprintf(info, "\n");
-			logd("lmbench", info);
+            logd("lmbench", info);
         }
     }
-    logd("lmbench", "strcat result");
-    memset(latency_result_string, 0, 2000);
-    for (i = 0; i < resultIndex; ++i) {
-        if (i) {
-            strcat(latency_result_string, "#");
-        }
-        sprintf(info, "%.5f:%.3f", memSizeResult[i], latencyResult[i]);
-        strcat(latency_result_string, info);
-    }
-    resultIndex = 0;
-    logd("lmbench", "strcat finish");
+    logd("lmbench", "all finish");
     return (0);
 }
 
@@ -154,13 +156,13 @@ loads(size_t len, size_t range, size_t stride,
 #if 0
     (*fpInit)(0, &state);
     sprintf(info, "loads: after init\n");
-	logd("lmbench", info);
+    logd("lmbench", info);
     (*benchmark_loads)(2, &state);
     sprintf(info, "loads: after benchmark\n");
-	logd("lmbench", info);
+    logd("lmbench", info);
     mem_cleanup(0, &state);
     sprintf(info, "loads: after cleanup\n");
-	logd("lmbench", info);
+    logd("lmbench", info);
     settime(1);
     save_n(1);
 #else
@@ -180,15 +182,15 @@ loads(size_t len, size_t range, size_t stride,
     sprintf(info, "%.5f %.3f\n", memSizeResult[resultIndex], latencyResult[resultIndex]);
     resultIndex++;
 
-	logd("lmbench", info);
+    logd("lmbench", info);
 }
 
 size_t
 step(size_t k) {
     if (k < 1024) {
-        k = k * 2;
+        k = k * 4;
     } else if (k < 4 * 1024) {
-        k += 1024;
+        k += 2048;
     } else {
         size_t s;
 

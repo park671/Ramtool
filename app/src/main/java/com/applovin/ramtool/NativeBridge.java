@@ -11,5 +11,6 @@ public class NativeBridge {
     public static native String testBandWidth();
 
     public static native String testLatency();
+    public static native String getCurrentLatency();
 
 }
