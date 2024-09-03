@@ -85,7 +85,7 @@
                 android:textColor="#FF0" />
         </LinearLayout>
 
-        <com.applovin.ramtool.ui.LineChartView
+        <com.applovin.ramtool.ram.ui.LineChartView
             android:id="@+id/latency_chartview"
             android:layout_width="match_parent"
             android:layout_height="200dp"

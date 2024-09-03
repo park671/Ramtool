@@ -1,4 +1,4 @@
-package com.applovin.ramtool.ui;
+package com.applovin.ramtool.ram.ui;
 
 import android.content.Context;
 import android.content.res.TypedArray;

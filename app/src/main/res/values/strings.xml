@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Ramtool</string>
+    <string name="cpu_page_name">cpu tool</string>
+    <string name="ram_page_name">ram tool</string>
 </resources>

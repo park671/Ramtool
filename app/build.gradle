@@ -31,7 +31,8 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
     buildFeatures {
-        aidl true
+        viewBinding = true
+        aidl = true
     }
     externalNativeBuild {
         cmake {

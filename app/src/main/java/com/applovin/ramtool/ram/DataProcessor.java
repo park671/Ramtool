@@ -1,4 +1,4 @@
-package com.applovin.ramtool;
+package com.applovin.ramtool.ram;
 
 import android.util.Log;
 

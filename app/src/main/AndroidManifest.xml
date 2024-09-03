@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <application
-        android:allowNativeHeapPointerTagging="false"
-        android:largeHeap="true"
         android:allowBackup="true"
+        android:allowNativeHeapPointerTagging="false"
         android:icon="@drawable/icon"
-        android:label="@string/app_name">
+        android:label="@string/app_name"
+        android:largeHeap="true">
+
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -17,6 +17,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".cpu.CpuActivity"
+            android:exported="true"
+            android:label="@string/cpu_page_name" />
+
+        <activity
+            android:name=".ram.RamActivity"
+            android:exported="true"
+            android:label="@string/ram_page_name" />
 
         <service
             android:name=".Sub1ProcessService"

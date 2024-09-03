@@ -6,6 +6,7 @@
 #include "limits"
 #include "stream/arm_stream.h"
 #include "lmbench/lmbench.h"
+#include "cpu/c2clat.h"
 
 long long *array[10240];
 int index = 0;
@@ -62,4 +63,22 @@ extern "C"
 JNIEXPORT jstring JNICALL
 Java_com_applovin_ramtool_NativeBridge_getCurrentLatency(JNIEnv *env, jclass clazz) {
     return charToJstring(env, getLatencys());
+}
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_applovin_ramtool_NativeBridge_testCore2CoreLatency(JNIEnv *env, jclass clazz, jint mode) {
+    jobjectArray result = testCore2CoreLat(env, mode);
+    // Find the Java class
+    jclass nativeBridgeClass = env->FindClass("com/applovin/ramtool/NativeBridge");
+
+    // Find the Java method ID
+    jmethodID methodID = env->GetStaticMethodID(nativeBridgeClass, "onCore2CoreLatencyFinish",
+                                                "([[I)V");
+
+    // Call the Java method
+    env->CallStaticVoidMethod(nativeBridgeClass, methodID, result);
+
+    // Clean up local references
+    env->DeleteLocalRef(result);
+    env->DeleteLocalRef(nativeBridgeClass);
 }

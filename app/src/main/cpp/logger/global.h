@@ -11,8 +11,8 @@ typedef unsigned char byte;
 extern "C" {
 #endif
 
-void logd(const char *tag, char *msg);
-void loge(char *tag, char *msg);
+void logd(const char *tag, const char *fmt, ...);
+void loge(const char *tag, const char *fmt, ...);
 
 #ifdef __cplusplus
 };
