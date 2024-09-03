@@ -1,4 +1,4 @@
-package com.applovin.ramtool.cpu;
+package com.park.hardware.cpu;
 
 public @interface Core2CoreLatMode {
 

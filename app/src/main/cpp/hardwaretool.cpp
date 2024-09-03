@@ -7,13 +7,15 @@
 #include "stream/arm_stream.h"
 #include "lmbench/lmbench.h"
 #include "cpu/c2clat.h"
+#include "cpu/sve_add.h"
+#include "cpu/sve2_only.h"
 
 long long *array[10240];
 int index = 0;
 
 extern "C"
 JNIEXPORT jboolean JNICALL
-Java_com_applovin_ramtool_NativeBridge_allocHeapMemory(JNIEnv *env, jclass clazz, jint size_in_mb) {
+Java_com_park_hardware_NativeBridge_allocHeapMemory(JNIEnv *env, jclass clazz, jint size_in_mb) {
     int size_in_b = 1024 * 1024 * size_in_mb; // 8
     array[index] = (long long *) malloc(size_in_b);
     if (array[index] != nullptr) {
@@ -29,7 +31,7 @@ Java_com_applovin_ramtool_NativeBridge_allocHeapMemory(JNIEnv *env, jclass clazz
 
 extern "C"
 JNIEXPORT void JNICALL
-Java_com_applovin_ramtool_NativeBridge_release(JNIEnv *env, jclass clazz) {
+Java_com_park_hardware_NativeBridge_release(JNIEnv *env, jclass clazz) {
     for (int i = 0; i < index; i++) {
         free(array[i]);
     }
@@ -47,7 +49,7 @@ jstring charToJstring(JNIEnv *env, const char *pat) {
 
 extern "C"
 JNIEXPORT jstring JNICALL
-Java_com_applovin_ramtool_NativeBridge_testLatency(JNIEnv *env, jclass clazz) {
+Java_com_park_hardware_NativeBridge_testLatency(JNIEnv *env, jclass clazz) {
     int count = 3;
     char *params[] = {"128", "256", "2048"};
     entrance(count, params);
@@ -55,21 +57,21 @@ Java_com_applovin_ramtool_NativeBridge_testLatency(JNIEnv *env, jclass clazz) {
 }
 extern "C"
 JNIEXPORT jstring JNICALL
-Java_com_applovin_ramtool_NativeBridge_testBandWidth(JNIEnv *env, jclass clazz) {
+Java_com_park_hardware_NativeBridge_testBandWidth(JNIEnv *env, jclass clazz) {
     return charToJstring(env, startBenchmark());
 }
 
 extern "C"
 JNIEXPORT jstring JNICALL
-Java_com_applovin_ramtool_NativeBridge_getCurrentLatency(JNIEnv *env, jclass clazz) {
+Java_com_park_hardware_NativeBridge_getCurrentLatency(JNIEnv *env, jclass clazz) {
     return charToJstring(env, getLatencys());
 }
 extern "C"
 JNIEXPORT void JNICALL
-Java_com_applovin_ramtool_NativeBridge_testCore2CoreLatency(JNIEnv *env, jclass clazz, jint mode) {
+Java_com_park_hardware_NativeBridge_testCore2CoreLatency(JNIEnv *env, jclass clazz, jint mode) {
     jobjectArray result = testCore2CoreLat(env, mode);
     // Find the Java class
-    jclass nativeBridgeClass = env->FindClass("com/applovin/ramtool/NativeBridge");
+    jclass nativeBridgeClass = env->FindClass("com/park/hardware/NativeBridge");
 
     // Find the Java method ID
     jmethodID methodID = env->GetStaticMethodID(nativeBridgeClass, "onCore2CoreLatencyFinish",
@@ -81,4 +83,15 @@ Java_com_applovin_ramtool_NativeBridge_testCore2CoreLatency(JNIEnv *env, jclass 
     // Clean up local references
     env->DeleteLocalRef(result);
     env->DeleteLocalRef(nativeBridgeClass);
+}
+
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_park_hardware_NativeBridge_testSve(JNIEnv *env, jclass clazz) {
+    testSveAdd();
+}
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_park_hardware_NativeBridge_testSve2(JNIEnv *env, jclass clazz) {
+    testSve2Only();
 }

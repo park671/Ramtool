@@ -1,4 +1,4 @@
-package com.applovin.ramtool.ram.ui;
+package com.park.hardware.ram.ui;
 
 import android.content.Context;
 import android.graphics.Canvas;

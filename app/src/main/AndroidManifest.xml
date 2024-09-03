@@ -29,15 +29,15 @@
             android:label="@string/ram_page_name" />
 
         <service
-            android:name=".Sub1ProcessService"
+            android:name=".process.Sub1ProcessService"
             android:exported="true"
             android:process=":memory_service1" />
         <service
-            android:name=".Sub2ProcessService"
+            android:name=".process.Sub2ProcessService"
             android:exported="true"
             android:process=":memory_service2" />
         <service
-            android:name=".Sub3ProcessService"
+            android:name=".process.Sub3ProcessService"
             android:exported="true"
             android:process=":memory_service3" />
     </application>

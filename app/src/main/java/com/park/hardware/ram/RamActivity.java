@@ -1,4 +1,4 @@
-package com.applovin.ramtool.ram;
+package com.park.hardware.ram;
 
 import android.app.Activity;
 import android.app.ActivityManager;
@@ -20,12 +20,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.applovin.ramtool.IMemAllocAidlInterface;
-import com.applovin.ramtool.R;
-import com.applovin.ramtool.Sub1ProcessService;
-import com.applovin.ramtool.Sub2ProcessService;
-import com.applovin.ramtool.Sub3ProcessService;
-import com.applovin.ramtool.ram.ui.LineChartView;
+import com.applovin.ramtool.ISubProcessService;
+import com.park.hardware.R;
+import com.park.hardware.process.Sub1ProcessService;
+import com.park.hardware.process.Sub2ProcessService;
+import com.park.hardware.process.Sub3ProcessService;
+import com.park.hardware.ram.ui.LineChartView;
 
 
 public class RamActivity extends Activity {
@@ -119,6 +119,24 @@ public class RamActivity extends Activity {
 
         ensureSubProcessService(null);
         refreshSystemInfo();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        isSubProcessReady = false;
+        try {
+            unbindService(serviceConnection1);
+        } catch (Throwable ignore) {
+        }
+        try {
+            unbindService(serviceConnection2);
+        } catch (Throwable ignore) {
+        }
+        try {
+            unbindService(serviceConnection3);
+        } catch (Throwable ignore) {
+        }
     }
 
     private long totalMemory = 0;
@@ -251,7 +269,7 @@ public class RamActivity extends Activity {
     }
 
     private void ensureSubProcessService(Runnable runnable) {
-        if (memAllocAidlInterface1 == null || memAllocAidlInterface2 == null || memAllocAidlInterface3 == null) {
+        if (subProcessService1 == null || subProcessService2 == null || subProcessService3 == null) {
             isSubProcessReady = false;
             setOnSubProcessReadyListener(runnable);
             try {
@@ -275,44 +293,44 @@ public class RamActivity extends Activity {
         }
     }
 
-    private IMemAllocAidlInterface memAllocAidlInterface1, memAllocAidlInterface2, memAllocAidlInterface3;
+    private ISubProcessService subProcessService1, subProcessService2, subProcessService3;
 
     private ServiceConnection serviceConnection1 = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-            memAllocAidlInterface1 = IMemAllocAidlInterface.Stub.asInterface(service);
+            subProcessService1 = ISubProcessService.Stub.asInterface(service);
             onSubProcessReady();
         }
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
-            memAllocAidlInterface1 = null;
+            subProcessService1 = null;
         }
     };
 
     private ServiceConnection serviceConnection2 = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-            memAllocAidlInterface2 = IMemAllocAidlInterface.Stub.asInterface(service);
+            subProcessService2 = ISubProcessService.Stub.asInterface(service);
             onSubProcessReady();
         }
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
-            memAllocAidlInterface2 = null;
+            subProcessService2 = null;
         }
     };
 
     private ServiceConnection serviceConnection3 = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-            memAllocAidlInterface3 = IMemAllocAidlInterface.Stub.asInterface(service);
+            subProcessService3 = ISubProcessService.Stub.asInterface(service);
             onSubProcessReady();
         }
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
-            memAllocAidlInterface3 = null;
+            subProcessService3 = null;
         }
     };
 
@@ -332,7 +350,7 @@ public class RamActivity extends Activity {
 
     private synchronized void onSubProcessReady() {
         Log.d(TAG, "onSubProcessReady");
-        if (memAllocAidlInterface1 == null || memAllocAidlInterface2 == null || memAllocAidlInterface3 == null) {
+        if (subProcessService1 == null || subProcessService2 == null || subProcessService3 == null) {
             return;
         }
         Log.d(TAG, "real ready!");
@@ -404,7 +422,7 @@ public class RamActivity extends Activity {
                 loadingMask.setVisibility(View.VISIBLE);
                 loadingMask.setClickable(true);
             });
-            String result = memAllocAidlInterface1.testLatency();
+            String result = subProcessService1.testLatency();
             HandlerThread handlerThread = new HandlerThread("temp_latency_update_thread");
             handlerThread.start();
             Handler handler = new Handler(handlerThread.getLooper());
@@ -419,7 +437,7 @@ public class RamActivity extends Activity {
             @Override
             public void run() {
                 try {
-                    String result = memAllocAidlInterface1.getCurrentLatency();
+                    String result = subProcessService1.getCurrentLatency();
                     try {
                         DataProcessor.getInstance().process(result);
                         l1CacheLatencyTextView.post(() -> {
@@ -432,7 +450,7 @@ public class RamActivity extends Activity {
                         tr.printStackTrace();
                         Log.d(TAG, "data process error");
                     }
-                    if (!memAllocAidlInterface1.isLatencyFinish()) {
+                    if (!subProcessService1.isLatencyFinish()) {
                         triggerLatencyUpdate(handler, handlerThread);
                     } else {
                         loadingMask.post(new Runnable() {
@@ -453,7 +471,7 @@ public class RamActivity extends Activity {
 
     private void triggerBandWidth() {
         try {
-            String result = memAllocAidlInterface1.testBandWidth();
+            String result = subProcessService1.testBandWidth();
             copyLegacyBandWidth.post(() -> {
                 String[] splitResult = result.split("#");
                 copyLegacyBandWidth.setText(splitResult[0].split(",")[0] + "MB/s");
@@ -480,25 +498,25 @@ public class RamActivity extends Activity {
         while (running) {
             boolean success = false;
             try {
-                success = memAllocAidlInterface1.allocHeapMemory(1)
-                        && memAllocAidlInterface2.allocHeapMemory(1)
-                        && memAllocAidlInterface3.allocHeapMemory(1);
+                success = subProcessService1.allocHeapMemory(1)
+                        && subProcessService2.allocHeapMemory(1)
+                        && subProcessService3.allocHeapMemory(1);
             } catch (Throwable tr) {
                 try {
-                    memAllocAidlInterface1.release();
+                    subProcessService1.release();
                 } catch (Throwable ignore) {
                 }
                 try {
-                    memAllocAidlInterface2.release();
+                    subProcessService2.release();
                 } catch (Throwable ignore) {
                 }
                 try {
-                    memAllocAidlInterface3.release();
+                    subProcessService3.release();
                 } catch (Throwable ignore) {
                 }
-                memAllocAidlInterface1 = null;
-                memAllocAidlInterface2 = null;
-                memAllocAidlInterface3 = null;
+                subProcessService1 = null;
+                subProcessService2 = null;
+                subProcessService3 = null;
                 tr.printStackTrace();
             }
             if (success) {
@@ -531,13 +549,13 @@ public class RamActivity extends Activity {
         while (running) {
             boolean success = false;
             try {
-                success = memAllocAidlInterface1.allocHeapMemory(1);
+                success = subProcessService1.allocHeapMemory(1);
             } catch (Throwable tr) {
                 try {
-                    memAllocAidlInterface1.release();
+                    subProcessService1.release();
                 } catch (Throwable ignore) {
                 }
-                memAllocAidlInterface1 = null;
+                subProcessService1 = null;
                 tr.printStackTrace();
             }
             if (success) {
@@ -569,13 +587,13 @@ public class RamActivity extends Activity {
         while (running) {
             boolean success = false;
             try {
-                success = memAllocAidlInterface3.allocJavaMemory(1);
+                success = subProcessService3.allocJavaMemory(1);
             } catch (Throwable tr) {
                 try {
-                    memAllocAidlInterface3.release();
+                    subProcessService3.release();
                 } catch (Throwable ignore) {
                 }
-                memAllocAidlInterface3 = null;
+                subProcessService3 = null;
                 tr.printStackTrace();
             }
             if (success) {

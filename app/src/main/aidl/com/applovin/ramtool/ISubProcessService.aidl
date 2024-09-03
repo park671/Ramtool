@@ -1,9 +1,9 @@
-// IMemAllocAidlInterface.aidl
+// ISubProcessService.aidl
 package com.applovin.ramtool;
 
 // Declare any non-default types here with import statements
 
-interface IMemAllocAidlInterface {
+interface ISubProcessService {
     /**
      * Demonstrates some basic types that you can use as parameters
      * and return values in AIDL.
@@ -15,4 +15,7 @@ interface IMemAllocAidlInterface {
     String testLatency();
     String getCurrentLatency();
     boolean isLatencyFinish();
+
+   boolean supportSVE();
+   boolean supportSVE2();
 }

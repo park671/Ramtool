@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    namespace 'com.applovin.ramtool'
+    namespace 'com.park.hardware'
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.applovin.ramtool"
+        applicationId "com.park.hardware"
         minSdk 26
         targetSdk 33
         versionCode 1

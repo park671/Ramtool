@@ -1,9 +1,12 @@
-package com.applovin.ramtool;
+package com.park.hardware.process;
 
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
 import android.os.RemoteException;
+
+import com.applovin.ramtool.ISubProcessService;
+import com.park.hardware.NativeBridge;
 
 import java.util.Random;
 
@@ -50,7 +53,7 @@ public class SubProcessService extends Service {
     private volatile boolean isLatencyFinished = false;
     private volatile String latencyStringResult;
 
-    class SubProcessServiceBinder extends IMemAllocAidlInterface.Stub {
+    class SubProcessServiceBinder extends ISubProcessService.Stub {
 
         @Override
         public boolean allocHeapMemory(int size) throws RemoteException {
@@ -94,6 +97,26 @@ public class SubProcessService extends Service {
         @Override
         public boolean isLatencyFinish() throws RemoteException {
             return isLatencyFinished;
+        }
+
+        @Override
+        public boolean supportSVE() throws RemoteException {
+            try {
+                NativeBridge.testSve();
+                return true;
+            } catch (Throwable ignore) {
+            }
+            return false;
+        }
+
+        @Override
+        public boolean supportSVE2() throws RemoteException {
+            try {
+                NativeBridge.testSve2();
+                return true;
+            } catch (Throwable ignore) {
+            }
+            return false;
         }
 
     }

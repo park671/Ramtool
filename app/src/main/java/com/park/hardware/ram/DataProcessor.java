@@ -1,4 +1,4 @@
-package com.applovin.ramtool.ram;
+package com.park.hardware.ram;
 
 import android.util.Log;
 

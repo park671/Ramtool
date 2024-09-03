@@ -1,4 +1,4 @@
-package com.applovin.ramtool.ram.ui;
+package com.park.hardware.ram.ui;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -9,7 +9,7 @@ import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 
-import com.applovin.ramtool.R;
+import com.park.hardware.R;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -189,7 +189,7 @@ public class FramBase extends LBaseView {
 
         @Override
         public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-            if(mDatas.size() <= showNum) {
+            if (mDatas.size() <= showNum) {
                 return true;
             }
             scrollXSum += distanceX;

@@ -15,41 +15,150 @@
             android:gravity="left"
             android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="12dp"
-                android:text="read mode"
-                android:textColor="@color/black"
-                android:textSize="16sp" />
+                android:gravity="left|center_vertical"
+                android:orientation="horizontal">
 
-            <com.applovin.ramtool.cpu.Core2CoreLatView
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_margin="12dp"
+                    android:src="@drawable/cpu" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="core to core latency (read mode)"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+
+            </LinearLayout>
+
+
+            <com.park.hardware.cpu.Core2CoreLatView
                 android:id="@+id/readLatView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="12dp"
-                android:text="write mode"
-                android:textColor="@color/black"
-                android:textSize="16sp" />
+                android:gravity="left|center_vertical"
+                android:orientation="horizontal">
 
-            <com.applovin.ramtool.cpu.Core2CoreLatView
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_margin="12dp"
+                    android:src="@drawable/cpu" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="core to core latency (write mode)"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+
+            </LinearLayout>
+
+            <com.park.hardware.cpu.Core2CoreLatView
                 android:id="@+id/writeLatView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left|center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_margin="12dp"
+                    android:src="@drawable/cpu" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="SVE instruction"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
+                <CheckBox
+                    android:id="@+id/sveSupportCheckBox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="12dp"
+                    android:clickable="false"
+                    android:text="support" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left|center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_margin="12dp"
+                    android:src="@drawable/cpu" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="SVE2 instruction"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
+                <CheckBox
+                    android:id="@+id/sve2SupportCheckBox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="12dp"
+                    android:clickable="false"
+                    android:text="support" />
+
+            </LinearLayout>
 
         </LinearLayout>
 
     </ScrollView>
 
-    <Button
-        android:id="@+id/core2coreLatButton"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="core 2 core lat"
-        android:textAllCaps="false" />
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/core2coreLatButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="core 2 core latency"
+            android:textAllCaps="false" />
+
+        <Button
+            android:id="@+id/sveAddButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="instruction"
+            android:textAllCaps="false" />
+
+    </LinearLayout>
 
 </LinearLayout>

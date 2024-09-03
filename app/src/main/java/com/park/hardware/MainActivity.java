@@ -1,4 +1,4 @@
-package com.applovin.ramtool;
+package com.park.hardware;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -7,9 +7,9 @@ import android.view.LayoutInflater;
 
 import androidx.annotation.Nullable;
 
-import com.applovin.ramtool.cpu.CpuActivity;
-import com.applovin.ramtool.databinding.ActivityMainBinding;
-import com.applovin.ramtool.ram.RamActivity;
+import com.park.hardware.cpu.CpuActivity;
+import com.park.hardware.databinding.ActivityMainBinding;
+import com.park.hardware.ram.RamActivity;
 
 public class MainActivity extends Activity {
 

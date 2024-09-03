@@ -1,4 +1,4 @@
-package com.applovin.ramtool.cpu;
+package com.park.hardware.cpu;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -47,10 +47,12 @@ public class Core2CoreLatView extends View {
     private volatile int minData, maxData;
 
     private volatile int colorSelect;
+    private volatile boolean inProgress = false;
 
     public void update(int[][] latData, int colorSelect) {
         this.latData = latData;
         this.colorSelect = colorSelect;
+        inProgress = false;
         if (latData != null) {
             minData = latData[0][0];
             maxData = latData[0][0];
@@ -61,6 +63,11 @@ public class Core2CoreLatView extends View {
                 }
             }
         }
+        invalidate();
+    }
+
+    public void startProgress() {
+        inProgress = true;
         invalidate();
     }
 
@@ -75,11 +82,19 @@ public class Core2CoreLatView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         if (latData == null || latData.length == 0) {
-            canvas.drawColor(Color.LTGRAY);
-            canvas.drawText("unavailable",
-                    getWidth() / 2,
-                    getWidth() / 2,
-                    textPaint);
+            if (inProgress) {
+                canvas.drawColor(Color.DKGRAY);
+                canvas.drawText("please wait...",
+                        getWidth() / 2,
+                        getWidth() / 2,
+                        textPaint);
+            } else {
+                canvas.drawColor(Color.LTGRAY);
+                canvas.drawText("unavailable",
+                        getWidth() / 2,
+                        getWidth() / 2,
+                        textPaint);
+            }
             return;
         }
 

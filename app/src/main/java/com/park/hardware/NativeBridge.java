@@ -1,12 +1,12 @@
-package com.applovin.ramtool;
+package com.park.hardware;
 
-import com.applovin.ramtool.cpu.Core2CoreLatMode;
-import com.applovin.ramtool.cpu.OnCore2CoreLatencyCallback;
+import com.park.hardware.cpu.Core2CoreLatMode;
+import com.park.hardware.cpu.OnCore2CoreLatencyCallback;
 
 public class NativeBridge {
 
     static {
-        System.loadLibrary("ramtool");
+        System.loadLibrary("hardwaretool");
     }
 
     public static native boolean allocHeapMemory(int sizeInMB);
@@ -39,5 +39,8 @@ public class NativeBridge {
         core2CoreLatencyCallback.onResult(result);
         core2CoreLatencyCallback = null;
     }
+
+    public static native void testSve();
+    public static native void testSve2();
 
 }

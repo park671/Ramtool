@@ -40,11 +40,3 @@ void loge(const char *tag, const char *fmt, ...) {
     __android_log_print(ANDROID_LOG_ERROR, tag, fmt, args);
     va_end(args);
 }
-
-void logd(const char *tag, char *msg) {
-    __android_log_print(ANDROID_LOG_DEBUG, tag, "%s", msg);
-}
-
-void loge(char *tag, char *msg) {
-    __android_log_print(ANDROID_LOG_ERROR, tag, "%s", msg);
-}
