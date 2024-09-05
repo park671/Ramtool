@@ -1,15 +1,14 @@
 //
 // Created by Park Yu on 2024/9/3.
 //
-
-#include "sve2_only.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <android/log.h>
+#include "inst.h"
 
 #define SVE2_TAG "sve_2"
 
-extern "C" int testSve2Only() {
+extern "C" int testSve2() {
     int8_t a[16] = {1, 2, 3, 4, 5, 6, 7, 8, -1, -2, -3, -4, -5, -6, -7, -8};
     int8_t b[16] = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
     int8_t c[16];

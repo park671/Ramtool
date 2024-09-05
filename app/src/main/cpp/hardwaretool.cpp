@@ -6,9 +6,9 @@
 #include "limits"
 #include "stream/arm_stream.h"
 #include "lmbench/lmbench.h"
-#include "cpu/c2clat.h"
-#include "cpu/sve_add.h"
-#include "cpu/sve2_only.h"
+#include "cpu/lat/c2clat.h"
+
+#include "cpu/inst/inst.h"
 
 long long *array[10240];
 int index = 0;
@@ -88,10 +88,55 @@ Java_com_park_hardware_NativeBridge_testCore2CoreLatency(JNIEnv *env, jclass cla
 extern "C"
 JNIEXPORT void JNICALL
 Java_com_park_hardware_NativeBridge_testSve(JNIEnv *env, jclass clazz) {
-    testSveAdd();
+    testSve();
 }
 extern "C"
 JNIEXPORT void JNICALL
 Java_com_park_hardware_NativeBridge_testSve2(JNIEnv *env, jclass clazz) {
-    testSve2Only();
+    testSve2();
+}
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_park_hardware_NativeBridge_testAarch64(JNIEnv *env, jclass clazz) {
+    testAarch64();
+}
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_park_hardware_NativeBridge_testVfp(JNIEnv *env, jclass clazz) {
+    testVfp();
+}
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_park_hardware_NativeBridge_testNeon(JNIEnv *env, jclass clazz) {
+    testNeon();
+}
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_park_hardware_NativeBridge_testAsimd(JNIEnv *env, jclass clazz) {
+    testAsimd();
+}
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_park_hardware_NativeBridge_testAes(JNIEnv *env, jclass clazz) {
+    testAes();
+}
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_park_hardware_NativeBridge_testSha1(JNIEnv *env, jclass clazz) {
+    testSha1();
+}
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_park_hardware_NativeBridge_testSha2(JNIEnv *env, jclass clazz) {
+    testSha2();
+}
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_park_hardware_NativeBridge_testPmull(JNIEnv *env, jclass clazz) {
+    testPmull();
+}
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_park_hardware_NativeBridge_testCrc32(JNIEnv *env, jclass clazz) {
+    testCrc32();
 }

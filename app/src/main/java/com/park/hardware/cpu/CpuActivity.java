@@ -5,10 +5,12 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.widget.CheckBox;
 
 import androidx.annotation.Nullable;
 
@@ -17,6 +19,8 @@ import com.park.hardware.NativeBridge;
 import com.park.hardware.databinding.ActivityCpuBinding;
 import com.park.hardware.process.Sub1ProcessService;
 import com.park.hardware.process.SubProcessRunnable;
+
+import java.util.concurrent.CountDownLatch;
 
 public class CpuActivity extends Activity {
 
@@ -29,7 +33,11 @@ public class CpuActivity extends Activity {
         super.onCreate(savedInstanceState);
         binding = ActivityCpuBinding.inflate(LayoutInflater.from(this));
         binding.core2coreLatButton.setOnClickListener(v -> startCore2CoreLatencyTestReadMode());
-        binding.sveAddButton.setOnClickListener(v -> sveAddTest());
+        binding.sveAddButton.setOnClickListener(v -> {
+            new Thread(() -> {
+                testAllInst();
+            }).start();
+        });
         setContentView(binding.getRoot());
     }
 
@@ -74,59 +82,92 @@ public class CpuActivity extends Activity {
         }
     }
 
-    private void sveAddTest() {
+    private void setCheckBoxStatus(boolean status) {
         runOnUiThread(() -> {
-            binding.sveSupportCheckBox.setEnabled(false);
-            binding.sve2SupportCheckBox.setEnabled(false);
+            binding.aarch32SupportCheckBox.setEnabled(status);
+            binding.aarch64SupportCheckBox.setEnabled(status);
+            binding.vfpSupportCheckBox.setEnabled(status);
+            binding.neonSupportCheckBox.setEnabled(status);
+            binding.simdSupportCheckBox.setEnabled(status);
+            binding.sveSupportCheckBox.setEnabled(status);
+            binding.sve2SupportCheckBox.setEnabled(status);
+            //crypto ext
+            binding.aesSupportCheckBox.setEnabled(status);
+            binding.sha1SupportCheckBox.setEnabled(status);
+            binding.sha2SupportCheckBox.setEnabled(status);
+            binding.pmullSupportCheckBox.setEnabled(status);
+            binding.crc32SupportCheckBox.setEnabled(status);
         });
+    }
+
+    private void testInstBlock(final InstTestProvider provider, final CheckBox checkBox) {
+        CountDownLatch countDownLatch = new CountDownLatch(1);
         ensureSubProcessService(new SubProcessRunnable() {
             @Override
             public void run() {
                 try {
-                    if (subProcessService.supportSVE()) {
+                    if (provider.support()) {
                         runOnUiThread(() -> {
-                            binding.sveSupportCheckBox.setChecked(true);
+                            checkBox.setChecked(true);
                         });
                     } else {
                         runOnUiThread(() -> {
-                            binding.sveSupportCheckBox.setChecked(false);
+                            checkBox.setChecked(false);
                         });
                     }
                 } catch (Throwable ignore) {
                     runOnUiThread(() -> {
-                        binding.sveSupportCheckBox.setChecked(false);
+                        checkBox.setChecked(false);
                     });
-                }
-                //sve2
-                try {
-                    if (subProcessService.supportSVE2()) {
-                        runOnUiThread(() -> {
-                            binding.sve2SupportCheckBox.setChecked(true);
-                        });
-                    } else {
-                        runOnUiThread(() -> {
-                            binding.sve2SupportCheckBox.setChecked(false);
-                        });
+                } finally {
+                    try {
+                        countDownLatch.countDown();
+                    } catch (Throwable ignore) {
                     }
-                } catch (Throwable ignore) {
-                    runOnUiThread(() -> {
-                        binding.sve2SupportCheckBox.setChecked(false);
-                    });
                 }
-                runOnUiThread(() -> {
-                    binding.sveSupportCheckBox.setEnabled(true);
-                    binding.sve2SupportCheckBox.setEnabled(true);
-                });
             }
 
             @Override
             public void onError(String errorMessage) {
                 runOnUiThread(() -> {
-                    binding.sveSupportCheckBox.setEnabled(true);
-                    binding.sve2SupportCheckBox.setEnabled(true);
+                    checkBox.setEnabled(true);
                 });
+                try {
+                    countDownLatch.countDown();
+                } catch (Throwable ignore) {
+                }
             }
         });
+        try {
+            countDownLatch.await();
+        } catch (Throwable ignore) {
+        }
+    }
+
+    private void testAllInst() {
+        setCheckBoxStatus(false);
+        testInstBlock(() -> subProcessService.testSve(), binding.sveSupportCheckBox);
+        testInstBlock(() -> subProcessService.testSve2(), binding.sve2SupportCheckBox);
+        testInstBlock(() -> {
+            String[] supportedAbis = Build.SUPPORTED_ABIS;
+            for (String abi : supportedAbis) {
+                if (abi.equalsIgnoreCase("armeabi-v7a")) {
+                    return true;
+                }
+            }
+            return false;
+        }, binding.aarch32SupportCheckBox);
+        testInstBlock(() -> subProcessService.testAarch64(), binding.aarch64SupportCheckBox);
+        testInstBlock(() -> subProcessService.testVfp(), binding.vfpSupportCheckBox);
+        testInstBlock(() -> subProcessService.testNeon(), binding.neonSupportCheckBox);
+        testInstBlock(() -> subProcessService.testAsimd(), binding.simdSupportCheckBox);
+
+        testInstBlock(() -> subProcessService.testAes(), binding.aesSupportCheckBox);
+        testInstBlock(() -> subProcessService.testSha1(), binding.sha1SupportCheckBox);
+        testInstBlock(() -> subProcessService.testSha2(), binding.sha2SupportCheckBox);
+        testInstBlock(() -> subProcessService.testPmull(), binding.pmullSupportCheckBox);
+        testInstBlock(() -> subProcessService.testCrc32(), binding.crc32SupportCheckBox);
+        setCheckBoxStatus(true);
     }
 
     private void startCore2CoreLatencyTestReadMode() {

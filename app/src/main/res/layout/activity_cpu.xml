@@ -184,40 +184,6 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="TrustZone instruction"
-                    android:textColor="@color/black"
-                    android:textSize="16sp" />
-
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:layout_weight="1" />
-
-                <CheckBox
-                    android:id="@+id/trustZoneSupportCheckBox"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="12dp"
-                    android:clickable="false"
-                    android:text="support" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="left|center_vertical"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_margin="12dp"
-                    android:src="@drawable/cpu" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
                     android:text="NEON instruction"
                     android:textColor="@color/black"
                     android:textSize="16sp" />
@@ -363,7 +329,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="AES (crypto ext)"
+                    android:text="AES"
                     android:textColor="@color/black"
                     android:textSize="16sp" />
 
@@ -397,7 +363,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="sha-1 (crypto ext)"
+                    android:text="sha-1"
                     android:textColor="@color/black"
                     android:textSize="16sp" />
 
@@ -431,7 +397,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="sha-2 (crypto ext)"
+                    android:text="sha-2"
                     android:textColor="@color/black"
                     android:textSize="16sp" />
 
@@ -465,7 +431,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="pmull (crypto ext)"
+                    android:text="pmull"
                     android:textColor="@color/black"
                     android:textSize="16sp" />
 
@@ -499,7 +465,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="crc32 (crypto ext)"
+                    android:text="crc32"
                     android:textColor="@color/black"
                     android:textSize="16sp" />
 

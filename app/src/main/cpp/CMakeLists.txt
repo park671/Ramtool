@@ -9,8 +9,8 @@ set(CMAKE_ASM_SOURCE_FILE_EXTENSIONS s)
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O3 -DNDEBUG")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -DNDEBUG")
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -march=armv9-a+sve")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -march=armv9-a+sve")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -mfpu=neon -march=armv9-a+sve+crypto")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mfpu=neon -march=armv9-a+sve+crypto")
 
 
 file(GLOB_RECURSE LOGGER_SRC "logger/*.cpp")

@@ -40,7 +40,17 @@ public class NativeBridge {
         core2CoreLatencyCallback = null;
     }
 
+
+    public static native void testAarch64();
+    public static native void testVfp();
+    public static native void testNeon();
+    public static native void testAsimd();
     public static native void testSve();
     public static native void testSve2();
+    public static native void testAes();
+    public static native void testSha1();
+    public static native void testSha2();
+    public static native void testPmull();
+    public static native void testCrc32();
 
 }

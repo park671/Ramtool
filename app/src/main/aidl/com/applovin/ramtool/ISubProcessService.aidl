@@ -15,7 +15,18 @@ interface ISubProcessService {
     String testLatency();
     String getCurrentLatency();
     boolean isLatencyFinish();
-
-   boolean supportSVE();
-   boolean supportSVE2();
+    
+    boolean testAarch64();
+    boolean testVfp();
+    
+    boolean testNeon();
+    boolean testAsimd();
+    boolean testSve();
+    boolean testSve2();
+    
+    boolean testAes();
+    boolean testSha1();
+    boolean testSha2();
+    boolean testPmull();
+    boolean testCrc32();
 }

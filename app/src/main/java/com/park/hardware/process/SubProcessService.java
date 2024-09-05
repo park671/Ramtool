@@ -100,7 +100,47 @@ public class SubProcessService extends Service {
         }
 
         @Override
-        public boolean supportSVE() throws RemoteException {
+        public boolean testAarch64() throws RemoteException {
+            try {
+                NativeBridge.testAarch64();
+                return true;
+            } catch (Throwable ignore) {
+            }
+            return false;
+        }
+
+        @Override
+        public boolean testVfp() throws RemoteException {
+            try {
+                NativeBridge.testVfp();
+                return true;
+            } catch (Throwable ignore) {
+            }
+            return false;
+        }
+
+        @Override
+        public boolean testNeon() throws RemoteException {
+            try {
+                NativeBridge.testNeon();
+                return true;
+            } catch (Throwable ignore) {
+            }
+            return false;
+        }
+
+        @Override
+        public boolean testAsimd() throws RemoteException {
+            try {
+                NativeBridge.testAsimd();
+                return true;
+            } catch (Throwable ignore) {
+            }
+            return false;
+        }
+
+        @Override
+        public boolean testSve() throws RemoteException {
             try {
                 NativeBridge.testSve();
                 return true;
@@ -110,9 +150,59 @@ public class SubProcessService extends Service {
         }
 
         @Override
-        public boolean supportSVE2() throws RemoteException {
+        public boolean testSve2() throws RemoteException {
             try {
                 NativeBridge.testSve2();
+                return true;
+            } catch (Throwable ignore) {
+            }
+            return false;
+        }
+
+        @Override
+        public boolean testAes() throws RemoteException {
+            try {
+                NativeBridge.testAes();
+                return true;
+            } catch (Throwable ignore) {
+            }
+            return false;
+        }
+
+        @Override
+        public boolean testSha1() throws RemoteException {
+            try {
+                NativeBridge.testSha1();
+                return true;
+            } catch (Throwable ignore) {
+            }
+            return false;
+        }
+
+        @Override
+        public boolean testSha2() throws RemoteException {
+            try {
+                NativeBridge.testSha2();
+                return true;
+            } catch (Throwable ignore) {
+            }
+            return false;
+        }
+
+        @Override
+        public boolean testPmull() throws RemoteException {
+            try {
+                NativeBridge.testPmull();
+                return true;
+            } catch (Throwable ignore) {
+            }
+            return false;
+        }
+
+        @Override
+        public boolean testCrc32() throws RemoteException {
+            try {
+                NativeBridge.testCrc32();
                 return true;
             } catch (Throwable ignore) {
             }
