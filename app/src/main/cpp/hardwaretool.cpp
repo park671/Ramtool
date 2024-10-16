@@ -9,6 +9,7 @@
 #include "cpu/lat/c2clat.h"
 
 #include "cpu/inst/inst.h"
+#include "cpu/load/load.h"
 
 long long *array[10240];
 int index = 0;
@@ -139,4 +140,9 @@ extern "C"
 JNIEXPORT void JNICALL
 Java_com_park_hardware_NativeBridge_testCrc32(JNIEnv *env, jclass clazz) {
     testCrc32();
+}
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_park_hardware_NativeBridge_occupyCpu(JNIEnv *env, jclass clazz, jint occupy_duration) {
+    occupy_cpu_with_load(occupy_duration);
 }

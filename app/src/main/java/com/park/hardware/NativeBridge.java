@@ -53,4 +53,6 @@ public class NativeBridge {
     public static native void testPmull();
     public static native void testCrc32();
 
+    public static native void occupyCpu(int occupy_duration);
+
 }

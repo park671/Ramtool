@@ -484,7 +484,6 @@
 
             </LinearLayout>
 
-
         </LinearLayout>
 
     </ScrollView>
@@ -506,6 +505,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="instruction"
+            android:textAllCaps="false" />
+
+        <Button
+            android:id="@+id/occupyCpuButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="busy load"
             android:textAllCaps="false" />
 
     </LinearLayout>

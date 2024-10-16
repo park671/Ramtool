@@ -22,6 +22,7 @@ file(GLOB_RECURSE CPU_BENCH_SRC "cpu/*.cpp" "cpu/*.c" "cpu/*.s")
 add_library(hardwaretool
         SHARED
         hardwaretool.cpp
+        cpu/load/load.cpp
         ${LOGGER_SRC}
         ${ARM_OPT_SRC}
         ${ARM_STREAM_SRC}

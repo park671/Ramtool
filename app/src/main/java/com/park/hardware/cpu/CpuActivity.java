@@ -38,6 +38,16 @@ public class CpuActivity extends Activity {
                 testAllInst();
             }).start();
         });
+
+        binding.occupyCpuButton.setOnClickListener(v -> {
+            int threadCount = Runtime.getRuntime().availableProcessors() * 2;
+            for (int i = 0; i < threadCount; i++) {
+                new Thread(() -> {
+                    NativeBridge.occupyCpu(30);
+                }, "busy_load").start();
+            }
+        });
+
         setContentView(binding.getRoot());
     }
 
